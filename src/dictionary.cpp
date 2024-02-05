@@ -1,7 +1,9 @@
-#include "dictionary.hpp"
+#include "../include/dictionary.hpp"
 
-void Dictionary::dictionaryInit()
+void Dictionary::init(int whoami, std::string path_to_dictionary)
 {
+    whoami_ = whoami;
+    path_to_dictionary_ = path_to_dictionary;
     // Initialize an empty dictionary JSON object
     std::string dictionary_string = "{}";
     rapidjson::Document dictionary_json = rapidjson::Document();
@@ -90,7 +92,7 @@ void Dictionary::dictionaryInit()
     dictionary_data_.assign(dictionary_data_.size(), 0);
 }
 
-void Dictionary::dictionaryStructureDisplay()
+void Dictionary::structureDisplay()
 {
     printf("+----------------------+--------+------+-----------------+\n");
     printf("| Name                 | Offset | Size | Type            |\n");
@@ -120,7 +122,7 @@ void Dictionary::dictionaryStructureDisplay()
     printf("+----------------------+--------+------+-----------------+\n");
 }
 
-void Dictionary::dictionaryDataDisplay()
+void Dictionary::dataDisplay()
 {
     printf("+-------------------------+-----------------+\n");
     printf("| Name                    | Value           |\n");
@@ -137,20 +139,20 @@ void Dictionary::dictionaryDataDisplay()
             for (auto& level3 : level2.values) {
                 bool is_last_level3 = &level3 == &level2.values.back();
                 if (is_last_level2 && is_last_level3)
-                    printf("|     └── %-15s | %-15s |\n", level3.name.c_str(), dictionaryGetValueString(level3.offset, level3.size, level3.type).c_str());
+                    printf("|     └── %-15s | %-15s |\n", level3.name.c_str(), getValueString(level3.offset, level3.size, level3.type).c_str());
                 else if (is_last_level2 && !is_last_level3)
-                    printf("|     ├── %-15s | %-15s |\n", level3.name.c_str(), dictionaryGetValueString(level3.offset, level3.size, level3.type).c_str());
+                    printf("|     ├── %-15s | %-15s |\n", level3.name.c_str(), getValueString(level3.offset, level3.size, level3.type).c_str());
                 else if (!is_last_level2 && is_last_level3)
-                    printf("| │   └── %-15s | %-15s |\n", level3.name.c_str(), dictionaryGetValueString(level3.offset, level3.size, level3.type).c_str());
+                    printf("| │   └── %-15s | %-15s |\n", level3.name.c_str(), getValueString(level3.offset, level3.size, level3.type).c_str());
                 else if (!is_last_level2 && !is_last_level3)
-                    printf("| │   ├── %-15s | %-15s |\n", level3.name.c_str(), dictionaryGetValueString(level3.offset, level3.size, level3.type).c_str());
+                    printf("| │   ├── %-15s | %-15s |\n", level3.name.c_str(), getValueString(level3.offset, level3.size, level3.type).c_str());
             }
         }
     }
     printf("+-------------------------+-----------------+\n");
 }
 
-std::string Dictionary::dictionaryGetValueString(const size_t offset, const size_t size, const std::string type)
+std::string Dictionary::getValueString(const size_t offset, const size_t size, const std::string type)
 {
     std::string value;
 
@@ -222,7 +224,7 @@ std::string Dictionary::dictionaryGetValueString(const size_t offset, const size
     return value;
 }
 
-void Dictionary::dictionaryGetOffsetSize(const int id, const std::string key, size_t& offset, size_t& size)
+void Dictionary::getOffsetSize(const int id, const std::string key, size_t& offset, size_t& size)
 {
     std::string key_level1 = "agent" + std::to_string(id);
     std::string key_level2;
@@ -292,7 +294,7 @@ void Dictionary::dictionaryGetOffsetSize(const int id, const std::string key, si
     offset = size = 0;
 }
 
-void Dictionary::dictionarySetResetUpdate(const int id, const std::string key, const bool localremote, const bool setreset)
+void Dictionary::setResetUpdate(const int id, const std::string key, const bool localremote, const bool setreset)
 {
     std::string key_level1 = "agent" + std::to_string(id);
     std::string key_level2;

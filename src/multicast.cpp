@@ -1,4 +1,4 @@
-#include "multicast.hpp"
+#include "../include/multicast.hpp"
 
 void Multicast::findInterfaceIP(std::string interface, std::string& ip)
 {
@@ -180,7 +180,12 @@ bool Multicast::ready()
     return false;
 }
 
-int Multicast::send(void* data, size_t len, bool blocking = false)
+bool Multicast::initialized()
+{
+    return initialized_ == true ? true : false;
+}
+
+int Multicast::send(void* data, size_t len, bool blocking)
 {
     if (!initialized_)
         return -1;
@@ -188,7 +193,7 @@ int Multicast::send(void* data, size_t len, bool blocking = false)
     return sendto(sock_, data, len, blocking ? 0 : MSG_DONTWAIT, (struct sockaddr*)&addr_, sizeof(addr_));
 }
 
-int Multicast::send(std::vector<uint8_t> data, bool blocking = false)
+int Multicast::send(std::vector<uint8_t> data, bool blocking)
 {
     if (!initialized_)
         return -1;
@@ -196,7 +201,7 @@ int Multicast::send(std::vector<uint8_t> data, bool blocking = false)
     return sendto(sock_, data.data(), data.size(), blocking ? 0 : MSG_DONTWAIT, (struct sockaddr*)&addr_, sizeof(addr_));
 }
 
-int Multicast::recv(void* data, size_t len, bool blocking = false)
+int Multicast::recv(void* data, size_t len, bool blocking)
 {
     if (!initialized_)
         return -1;
@@ -215,7 +220,7 @@ int Multicast::recv(void* data, size_t len, bool blocking = false)
     return ret;
 }
 
-int Multicast::recv(std::vector<uint8_t>& data, bool blocking = false)
+int Multicast::recv(std::vector<uint8_t>& data, bool blocking)
 {
     if (!initialized_)
         return -1;

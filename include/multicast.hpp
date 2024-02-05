@@ -81,6 +81,7 @@ public:
      */
     void init(std::string ip, int port, std::string interface);
     bool ready();
+    bool initialized();
 
     /**
      * @brief Sends data to the multicast group.
