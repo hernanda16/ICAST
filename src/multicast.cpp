@@ -99,7 +99,7 @@ unsigned long int Multicast::millis()
 
 //==============================================================================
 
-void Multicast::init(std::string ip, int port, std::string interface)
+void Multicast::init(std::string ip, int port, std::string interface, uint16_t period_ms, uint8_t loopback)
 {
     std::string interface_ip;
     findInterfaceIP(interface, interface_ip);
@@ -132,7 +132,7 @@ void Multicast::init(std::string ip, int port, std::string interface)
         exit(1);
     }
 
-    int loop = 1;
+    int loop = loopback;
     if (setsockopt(sock_, IPPROTO_IP, IP_MULTICAST_LOOP, (char*)&loop, sizeof(loop)) < 0) {
         std::cerr << "setsockopt error 2" << std::endl;
         exit(1);
@@ -148,6 +148,7 @@ void Multicast::init(std::string ip, int port, std::string interface)
         exit(1);
     }
 
+    comm_period_ = period_ms;
     unsigned long int now = millis();
     comm_time_next_tx_ = now;
     comm_time_last_rx_ = now;

@@ -35,7 +35,19 @@ typedef struct
 } DictLevel1;
 
 class Dictionary {
+private:
+    Dictionary() { }
+
 public:
+    static Dictionary* getInstance()
+    {
+        static Dictionary instance_;
+        return &instance_;
+    }
+
+    void operator=(const Dictionary&) = delete;
+    Dictionary(Dictionary& other) = delete;
+
     //Parameter
     //=========
     int whoami_;
@@ -49,6 +61,8 @@ public:
     /**
      * @brief Initialize dictionary based on dictionary.json
      *
+     * @param whoami The ID of the agent
+     * @param path_to_dictionary The path to the dictionary.json file
      */
     void init(int whoami, std::string path_to_dictionary);
 

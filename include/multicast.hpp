@@ -33,6 +33,7 @@ typedef struct
 
 class Multicast {
 private:
+    Multicast() { }
     bool initialized_ = false;
 
     int sock_;
@@ -68,9 +69,14 @@ private:
     unsigned long int millis();
 
 public:
-    Multicast()
+    static Multicast* getInstance()
     {
+        static Multicast instance_;
+        return &instance_;
     }
+
+    void operator=(const Multicast&) = delete;
+    Multicast(Multicast& other) = delete;
 
     /**
      * @brief Initializes the multicast object.
@@ -78,8 +84,10 @@ public:
      * @param ip The IP address of the multicast group.
      * @param port The port number of the multicast group.
      * @param interface The name of the network interface to use.
+     * @param period_ms The period of the multicast communication in milliseconds.
+     * @param loopback Whether to enable loopback mode (able recv myself).
      */
-    void init(std::string ip, int port, std::string interface);
+    void init(std::string ip, int port, std::string interface, uint16_t period_ms, uint8_t loopback = 0);
     bool ready();
     bool initialized();
 

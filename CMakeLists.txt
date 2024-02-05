@@ -13,6 +13,7 @@ set(EXAMPLE_SOURCES
 set(LIB_SOURCES
     src/dictionary.cpp
     src/multicast.cpp
+    src/icast.cpp
  )
 
 # Add executable
