@@ -7,7 +7,7 @@ int main()
 {
     Icast* icast = Icast::getInstance();
     Dictionary* dc = Dictionary::getInstance();
-    Multicast* mc = Multicast::getInstance();
+    Multicast_2* mc = Multicast_2::getInstance();
 
     icast->init();
 

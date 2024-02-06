@@ -13,8 +13,10 @@ set(EXAMPLE_SOURCES
 set(LIB_SOURCES
     src/dictionary.cpp
     src/multicast.cpp
+    src/multicast2.cpp
     src/icast.cpp
  )
 
 # Add executable
-add_executable(simple ${EXAMPLE_SOURCES} ${LIB_SOURCES})
+# add_executable(simple ${EXAMPLE_SOURCES} ${LIB_SOURCES})
+add_executable(simple2 example/simple2.cpp ${LIB_SOURCES})
