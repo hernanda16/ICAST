@@ -14,19 +14,12 @@
 #include "sys/ioctl.h"
 #include "sys/socket.h"
 #include "unistd.h"
+#include <sys/time.h>
 
-typedef struct
+class Multicast_3
 {
-    uint64_t ts;
-    uint64_t prev_ts;
-    uint8_t ip;
-    uint32_t period;
-    uint8_t distance;
-} Peer;
-
-class Multicast_3 {
 private:
-    Multicast_3() { }
+    Multicast_3() {}
 
     bool initialized_ = false;
 
@@ -40,8 +33,13 @@ private:
     unsigned long int comm_time_last_rx_ = 0;
 
     uint8_t tdma_my_ip_;
-    std::vector<Peer> tdma_peers_;
     uint8_t tdma_my_peer_index_;
+
+    std::vector<uint8_t> peer_ip;
+    std::vector<uint64_t> peer_ts;
+    std::vector<uint64_t> peer_prev_ts;
+
+    uint64_t wall_time_start_;
 
     /**
      * @brief Finds the IP address of a given network interface.
@@ -49,7 +47,7 @@ private:
      * @param interface The name of the network interface.
      * @param ip The IP address of the network interface.
      */
-    void findInterfaceIP(std::string interface, std::string& ip);
+    void findInterfaceIP(std::string interface, std::string &ip);
 
     /**
      * @brief Returns the current time in milliseconds.
@@ -59,14 +57,14 @@ private:
     uint64_t millis();
 
 public:
-    static Multicast_3* getInstance()
+    static Multicast_3 *getInstance()
     {
         static Multicast_3 instance_;
         return &instance_;
     }
 
-    void operator=(const Multicast_3&) = delete;
-    Multicast_3(Multicast_3& other) = delete;
+    void operator=(const Multicast_3 &) = delete;
+    Multicast_3(Multicast_3 &other) = delete;
 
     /**
      * @brief Initializes the multicast object.
@@ -82,21 +80,21 @@ public:
     /**
      * @brief Updates the TDMA peers sequence and period based on the current time.
      */
-    void updatePeers();
+    void updatePeers(uint8_t ip);
 
     /**
      * @brief Add a peer to the TDMA sequence if it is not already present.
-    */
+     */
     void addToPeer(uint32_t ip);
 
     /**
      * @brief Returns whether the multicast object is initialized.
-    */
+     */
     bool initialized();
 
     /**
      * @brief Returns whether the multicast object is initialized.
-    */
+     */
     bool readyToSend();
 
     /**
@@ -115,7 +113,7 @@ public:
      * @param blocking Whether to block until data is received.
      * @return int The number of bytes received, or -1 if an error occurred.
      */
-    int recv(std::vector<uint8_t>& data, bool blocking = false);
+    int recv(std::vector<uint8_t> &data, bool blocking = false);
 };
 
 #endif
