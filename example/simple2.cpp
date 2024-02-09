@@ -30,6 +30,8 @@ int main()
         // dc->getOffsetSize(1, "pos", offset, size);
         // std::memcpy(pose, dc->dictionary_data_.data() + offset, size);
         // std::cout << "Pose: " << pose[0] << " " << pose[1] << " " << pose[2] << std::endl;
+
+        usleep(1000);
     }
 
     return 0;

@@ -27,9 +27,7 @@ void Multicast_3::findInterfaceIP(std::string interface, std::string &ip)
 
 uint64_t Multicast_3::millis()
 {
-    timeval tim;
-    gettimeofday(&tim, NULL);
-    return 1.0e3 * tim.tv_sec + tim.tv_usec * 1.0e-3 - wall_time_start_;
+    return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count() - wall_time_start_;
 }
 
 void Multicast_3::init(std::string ip, int port, std::string interface, uint16_t period_ms, uint8_t loopback)
@@ -121,7 +119,7 @@ void Multicast_3::updatePeers(uint8_t ip)
     // delete peers that have not been heard from in a while
     for (size_t i = 0; i < peer_ip.size(); i++)
     {
-        if (time_now - peer_ts[i] > 2 * comm_period_)
+        if (time_now - peer_ts[i] > dead_threshold_ms)
         {
             peer_ip.erase(peer_ip.begin() + i);
             peer_ts.erase(peer_ts.begin() + i);
@@ -182,6 +180,8 @@ void Multicast_3::addToPeer(uint32_t ip)
         return;
     }
 
+    updatePeers(short_ip);
+
     // print peers
     for (size_t i = 0; i < peer_ip.size(); i++)
     {
@@ -214,15 +214,16 @@ void Multicast_3::addToPeer(uint32_t ip)
     if (hop_distance == peer_ip.size() - 1)
     {
         if ((float)(peer_ts[recv_from_index] - peer_prev_ts[recv_from_index]) / comm_period_ < 1.1)
-        {
             comm_period_ -= 2;
-        }
         else
-        {
             comm_period_ += 2;
-        }
 
-        printf("comm_period_: %d\n", comm_period_);
+        if (comm_period_ < comm_period_min_)
+            comm_period_ = comm_period_min_;
+        else if (comm_period_ > comm_period_max_)
+            comm_period_ = comm_period_max_;
+
+        printf("comm_period_: %d || REAL %d\n", comm_period_, peer_ts[recv_from_index] - peer_prev_ts[recv_from_index]);
 
         comm_time_next_tx_ = peer_ts[recv_from_index] + comm_period_ / peer_ip.size();
     }
@@ -276,8 +277,6 @@ int Multicast_3::recv(std::vector<uint8_t> &data, bool blocking)
     }
 
     addToPeer(addr.sin_addr.s_addr);
-
-    // std::cout << "Received " << ret << " bytes from " << inet_ntoa(addr.sin_addr) << std::endl;
 
     data = std::vector<uint8_t>(buf, buf + ret);
     return ret;
