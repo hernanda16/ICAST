@@ -55,6 +55,13 @@ void Multicast_2::routineTDMA(const in_addr_t& addr)
         peer.ip = addr;
         tdma_peers_.push_back(peer);
 
+        std::vector<uint32_t> vec;
+
+        uint32_t tes = addr;
+        vec.push_back(tes);
+
+        std::cout << "vec: " << vec[0] << std::endl;
+
         // Sort peers by IP address
         std::sort(tdma_peers_.begin(), tdma_peers_.end(), [](const Peer& a, const Peer& b) { return a.ip < b.ip; });
     }
@@ -66,6 +73,7 @@ void Multicast_2::routineTDMA(const in_addr_t& addr)
             break;
         }
     }
+    std::cout << "comm_period_: " << comm_period_ << std::endl;
 }
 
 void Multicast_2::callbackTDMA(const in_addr_t& addr)
@@ -89,11 +97,16 @@ void Multicast_2::callbackTDMA(const in_addr_t& addr)
     tdma_peers_[tdma_peer_id_].period = comm_time_last_rx_ - tdma_peers_[tdma_peer_id_].ts;
 
     if (tdma_peers_[tdma_peer_id_].distance == tdma_peers_.size() - 1) {
-        if ((float)(tdma_peers_[tdma_peer_id_].period / comm_period_) > 1.1)
-            comm_period_ -= 10;
+        if ((float)(tdma_peers_[tdma_peer_id_].period / comm_period_) < 1.1)
+            comm_period_ -= 2;
         else
-            comm_period_ += 10;
+            comm_period_ += 2;
         comm_time_next_tx_ = comm_time_last_rx_ + comm_period_ / tdma_peers_.size();
+
+        if (comm_period_ < 5)
+            comm_period_ = 5;
+        if (comm_period_ > 1000)
+            comm_period_ = 1000;
     }
 }
 

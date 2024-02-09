@@ -63,8 +63,7 @@ void Icast::init(bool print_structure)
 
 void Icast::update()
 {
-
-    if (mc->readyToSend()) {
+    if (mc->ready()) {
         std::vector<uint8_t> selected_data;
         dc->packetProcessTransmit(selected_data);
         if (selected_data.size() > 0) {

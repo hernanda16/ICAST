@@ -7,7 +7,7 @@ int main()
 {
     Icast* icast = Icast::getInstance();
     Dictionary* dc = Dictionary::getInstance();
-    Multicast_2* mc = Multicast_2::getInstance();
+    Multicast_3* mc = Multicast_3::getInstance();
 
     icast->init();
 
@@ -22,11 +22,11 @@ int main()
 
         icast->update();
 
-        float pose[3];
-        size_t offset, size;
-        dc->getOffsetSize(2, "pos", offset, size);
-        std::memcpy(pose, dc->dictionary_data_.data() + offset, size);
-        std::cout << "Pose: " << pose[0] << " " << pose[1] << " " << pose[2] << std::endl;
+        // float pose[3];
+        // size_t offset, size;
+        // dc->getOffsetSize(2, "pos", offset, size);
+        // std::memcpy(pose, dc->dictionary_data_.data() + offset, size);
+        // std::cout << "Pose: " << pose[0] << " " << pose[1] << " " << pose[2] << std::endl;
     }
 
     return 0;
@@ -35,15 +35,14 @@ int main()
 void setDataToBeSend(Dictionary* dc_ptr)
 {
     size_t offset, size;
-    dc_ptr->getOffsetSize(0, "pos_offset", offset, size);
-    std::cout << "Offset: " << offset << " Size: " << size << std::endl;
+    dc_ptr->getOffsetSize(1, "pos", offset, size);
+    // std::cout << "Offset: " << offset << " Size: " << size << std::endl;
 
     struct data_tag {
-        uint8_t agent = 2;
         float pose[3] = { 1.1, 2.2, 0.00 };
     } data_agent;
 
     std::memcpy(dc_ptr->dictionary_data_.data() + offset, &data_agent, size);
 
-    dc_ptr->setResetUpdate(0, "pos_offset", false, true);
+    dc_ptr->setResetUpdate(1, "pos", false, true);
 }

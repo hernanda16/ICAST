@@ -14,6 +14,7 @@ set(LIB_SOURCES
     src/dictionary.cpp
     src/multicast.cpp
     src/multicast2.cpp
+    src/multicast3.cpp
     src/icast.cpp
  )
 

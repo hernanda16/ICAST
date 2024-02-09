@@ -3,7 +3,8 @@
 
 #include "../include/dictionary.hpp"
 // #include "../include/multicast.hpp"
-#include "../include/multicast2.hpp"
+// #include "../include/multicast2.hpp"
+#include "../include/multicast3.hpp"
 
 #define MC_LOOPBACK 0
 
@@ -12,7 +13,7 @@ private:
     Icast()
     {
         dc = Dictionary::getInstance();
-        mc = Multicast_2::getInstance();
+        mc = Multicast_3::getInstance();
     }
 
 public:
@@ -26,7 +27,7 @@ public:
     Icast(Icast& other) = delete;
 
     Dictionary* dc;
-    Multicast_2* mc;
+    Multicast_3* mc;
 
     void init(bool print_structure = true);
     void update();
