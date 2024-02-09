@@ -31,7 +31,7 @@ private:
     unsigned long int comm_period_ = 1000;
     unsigned long int comm_time_next_tx_ = 0;
     unsigned long int comm_time_last_rx_ = 0;
-    unsigned long int comm_period_min_ = 5;
+    unsigned long int comm_period_min_ = 100;
     unsigned long int comm_period_max_ = 1000;
     float comm_period_threshold_ = 0.1;
     const uint16_t dead_threshold_ms = 1000;

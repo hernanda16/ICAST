@@ -23,6 +23,8 @@ int main()
             }
         }
 
+        setDataToBeSend(dc);
+
         icast->update();
 
         // float pose[3];
