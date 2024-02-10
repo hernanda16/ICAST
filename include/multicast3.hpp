@@ -5,6 +5,7 @@
 #include <chrono>
 #include <iostream>
 #include <vector>
+#include <fstream>
 
 #include "arpa/inet.h"
 #include "net/if.h"
@@ -15,6 +16,8 @@
 #include "sys/socket.h"
 #include "unistd.h"
 #include <sys/time.h>
+
+#define USE_CHRONO_TIMER
 
 class Multicast_3
 {
@@ -31,10 +34,10 @@ private:
     unsigned long int comm_period_ = 1000;
     unsigned long int comm_time_next_tx_ = 0;
     unsigned long int comm_time_last_rx_ = 0;
-    unsigned long int comm_period_min_ = 100;
+    unsigned long int comm_period_min_ = 10;
     unsigned long int comm_period_max_ = 1000;
     float comm_period_threshold_ = 0.1;
-    const uint16_t dead_threshold_ms = 1000;
+    const uint16_t dead_threshold_ms = 5000;
 
     uint8_t tdma_my_ip_;
     uint8_t tdma_my_peer_index_;
@@ -53,12 +56,7 @@ private:
      */
     void findInterfaceIP(std::string interface, std::string &ip);
 
-    /**
-     * @brief Returns the current time in milliseconds.
-     *
-     * @return unsigned long int The current time in milliseconds.
-     */
-    uint64_t millis();
+    std::ofstream log_file;
 
 public:
     static Multicast_3 *getInstance()
@@ -69,6 +67,15 @@ public:
 
     void operator=(const Multicast_3 &) = delete;
     Multicast_3(Multicast_3 &other) = delete;
+
+    /**
+     * @brief Returns the current time in milliseconds.
+     *
+     * @return unsigned long int The current time in milliseconds.
+     */
+    uint64_t millis();
+
+    uint64_t tick = 0;
 
     /**
      * @brief Initializes the multicast object.

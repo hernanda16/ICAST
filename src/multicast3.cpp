@@ -27,16 +27,21 @@ void Multicast_3::findInterfaceIP(std::string interface, std::string &ip)
 
 uint64_t Multicast_3::millis()
 {
-    // return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count() - wall_time_start_;
+#ifdef USE_CHRONO_TIMER
+    return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count() - wall_time_start_;
+#else
 
     struct timeval tv;
     gettimeofday(&tv, NULL);
     return (tv.tv_sec * 1000) + (tv.tv_usec / 1000) - wall_time_start_;
+#endif
 }
 
 void Multicast_3::init(std::string ip, int port, std::string interface, uint16_t period_ms, uint8_t loopback)
 {
-    wall_time_start_ = millis() & 0xFFFFFFFF;
+    log_file.open("../output.csv", std::ios::app);
+
+    wall_time_start_ = millis();
 
     std::string interface_ip;
     findInterfaceIP(interface, interface_ip);
@@ -91,6 +96,23 @@ void Multicast_3::init(std::string ip, int port, std::string interface, uint16_t
         exit(1);
     }
 
+    timeval tv;
+    tv.tv_sec = 0;
+    tv.tv_usec = 10; // 10 microseconds
+    if (setsockopt(sock_, SOL_SOCKET, SO_RCVTIMEO, (const char *)&tv, sizeof(tv)) < 0)
+    {
+        std::cerr << "setsockopt error 5" << std::endl;
+        exit(1);
+    }
+
+    // set udp buffer size to 64 B
+    int optval = 64;
+    if (setsockopt(sock_, SOL_SOCKET, SO_RCVBUF, &optval, sizeof(optval)) < 0)
+    {
+        std::cerr << "setsockopt error 6" << std::endl;
+        exit(1);
+    }
+
     comm_period_ = period_ms;
     unsigned long int now = millis();
     comm_time_next_tx_ = now;
@@ -107,7 +129,7 @@ void Multicast_3::init(std::string ip, int port, std::string interface, uint16_t
 
 void Multicast_3::updatePeers(uint8_t ip)
 {
-    const uint64_t time_now = millis();
+    const uint64_t time_now = tick;
 
     // update ts of ip in peer list
     for (size_t i = 0; i < peer_ip.size(); i++)
@@ -132,6 +154,20 @@ void Multicast_3::updatePeers(uint8_t ip)
         }
     }
 
+    // sort peer_ip, peer_ts, peer_prev_ts based on peer_ip
+    for (size_t i = 0; i < peer_ip.size(); i++)
+    {
+        for (size_t j = i + 1; j < peer_ip.size(); j++)
+        {
+            if (peer_ip[i] > peer_ip[j])
+            {
+                std::swap(peer_ip[i], peer_ip[j]);
+                std::swap(peer_ts[i], peer_ts[j]);
+                std::swap(peer_prev_ts[i], peer_prev_ts[j]);
+            }
+        }
+    }
+
     // Find my id
     for (size_t i = 0; i < peer_ip.size(); i++)
     {
@@ -145,7 +181,7 @@ void Multicast_3::updatePeers(uint8_t ip)
 
 void Multicast_3::addToPeer(uint32_t ip)
 {
-    const uint64_t time_now = millis();
+    const uint64_t time_now = tick;
     const uint8_t short_ip = (ip & ~(uint32_t)0xFF) >> 24;
 
     // check if ip is already in peer list
@@ -165,32 +201,17 @@ void Multicast_3::addToPeer(uint32_t ip)
         peer_ts.push_back(time_now);
         peer_prev_ts.push_back(time_now);
 
-        // sort peer_ip, peer_ts, peer_prev_ts based on peer_ip
-        for (size_t i = 0; i < peer_ip.size(); i++)
-        {
-            for (size_t j = i + 1; j < peer_ip.size(); j++)
-            {
-                if (peer_ip[i] > peer_ip[j])
-                {
-                    std::swap(peer_ip[i], peer_ip[j]);
-                    std::swap(peer_ts[i], peer_ts[j]);
-                    std::swap(peer_prev_ts[i], peer_prev_ts[j]);
-                }
-            }
-        }
-
         updatePeers(short_ip);
 
         return;
     }
 
-    updatePeers(short_ip);
-
-    // print peers
-    for (size_t i = 0; i < peer_ip.size(); i++)
+    if (short_ip == tdma_my_ip_)
     {
-        printf("peer_ip: %d || peer_ts: %d || peer_prev_ts: %d\n", peer_ip[i], peer_ts[i], peer_prev_ts[i]);
+        return;
     }
+
+    updatePeers(short_ip);
 
     // find recv_from index
     uint8_t recv_from_index = 0;
@@ -214,12 +235,36 @@ void Multicast_3::addToPeer(uint32_t ip)
         hop_distance = recv_from_index - tdma_my_peer_index_;
     }
 
-    // printf("HALO\n");
-
     // Calculate period
     if (hop_distance == peer_ip.size() - 1)
     {
-        // if ((float)(peer_ts[recv_from_index] - peer_prev_ts[recv_from_index]) / comm_period_ < 1.2)
+        static uint8_t prev_ip = short_ip;
+        static uint64_t buffer_period = 0;
+        static uint64_t buffer_count = 0;
+
+        uint64_t peer_period = peer_ts[recv_from_index] - peer_prev_ts[recv_from_index];
+
+        if (prev_ip == short_ip)
+        {
+            buffer_period += peer_period;
+            buffer_count++;
+        }
+        else
+        {
+            buffer_period = peer_period;
+            buffer_count = 1;
+        }
+
+        float mean_friend_period = (float)buffer_period / buffer_count;
+
+        prev_ip = short_ip;
+
+        static float prev_mean = mean_friend_period;
+        float derivative_period = mean_friend_period - prev_mean;
+        prev_mean = mean_friend_period;
+
+        float div_ = mean_friend_period / comm_period_;
+        // if (div_ < 1.35)
         //     comm_period_ -= 2;
         // else
         //     comm_period_ += 2;
@@ -229,10 +274,11 @@ void Multicast_3::addToPeer(uint32_t ip)
         // else if (comm_period_ > comm_period_max_)
         //     comm_period_ = comm_period_max_;
 
-        printf("comm_period_: %d || REAL %d\n", comm_period_, peer_ts[recv_from_index] - peer_prev_ts[recv_from_index]);
+        log_file << peer_ts[recv_from_index] << std::endl;
+
+        printf("recv_at: %d %d || REAL %d || mean %.2f || d_mean %.2f\n", tick, peer_ts[recv_from_index], peer_period, mean_friend_period, derivative_period);
 
         comm_time_next_tx_ = peer_ts[recv_from_index] + ((int64_t)comm_period_ / peer_ip.size());
-        printf("SETELAH %d\n", comm_time_next_tx_);
     }
 }
 
@@ -246,12 +292,12 @@ bool Multicast_3::readyToSend()
     if (!initialized_)
         return false;
 
-    const uint64_t time_now = millis();
+    const uint64_t time_now = tick;
 
-    // printf("================================== %d\n", time_now);
-    if (time_now > comm_time_next_tx_)
+    if (time_now >= comm_time_next_tx_)
     {
-        printf("MASUK KIRIM %d %d =============\n", time_now, comm_time_next_tx_);
+        printf("MASUK KIRIM %d %d ============= (%d)\n", time_now, comm_time_next_tx_, comm_period_);
+        log_file << comm_time_next_tx_ << ",";
         updatePeers(tdma_my_ip_);
 
         // Calculate next transmission time
@@ -268,7 +314,7 @@ int Multicast_3::send(std::vector<uint8_t> data, bool blocking)
     if (!initialized_)
         return -1;
 
-    return sendto(sock_, data.data(), data.size(), MSG_CONFIRM, (struct sockaddr *)&addr_, sizeof(addr_));
+    return sendto(sock_, data.data(), data.size(), 0, (struct sockaddr *)&addr_, sizeof(addr_));
 }
 
 int Multicast_3::recv(std::vector<uint8_t> &data, bool blocking)
@@ -280,12 +326,14 @@ int Multicast_3::recv(std::vector<uint8_t> &data, bool blocking)
 
     struct sockaddr_in addr;
     socklen_t addrlen = sizeof(addr);
-    int ret = recvfrom(sock_, buf, sizeof(buf), blocking ? 0 : MSG_DONTWAIT, (struct sockaddr *)&addr, &addrlen);
+    int ret = recvfrom(sock_, buf, sizeof(buf), 0, (struct sockaddr *)&addr, &addrlen);
     if (ret <= 0)
     {
         data.clear();
         return ret;
     }
+
+    tick = millis();
 
     addToPeer(addr.sin_addr.s_addr);
 

@@ -81,6 +81,7 @@ void Icast::init(bool print_structure)
 
 void Icast::update()
 {
+    mc->tick = mc->millis();
 
     if (mc->readyToSend())
     {
@@ -88,7 +89,6 @@ void Icast::update()
         dc->packetProcessTransmit(selected_data);
         if (selected_data.size() > 0)
         {
-            printf("HALO\n");
             mc->send(selected_data);
         }
     }
