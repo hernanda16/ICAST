@@ -38,7 +38,7 @@ add_library(icast ${LIB_SOURCES})
 # Add executable
 # add_executable(simple ${EXAMPLE_SOURCES} ${LIB_SOURCES})
 # add_executable(simple2 example/simple2.cpp ${LIB_SOURCES})
-add_executable(simple3 example/simple3.cpp)
+# add_executable(simple3 example/simple3.cpp)
 
 
 # Add support for installation
@@ -46,6 +46,12 @@ add_executable(simple3 example/simple3.cpp)
 
 set(CMAKE_INSTALL_INCLUDEDIR /usr/local/include)
 set(CMAKE_INSTALL_LIBDIR /usr/local/lib)
+
+target_include_directories(icast PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/utils>
+    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
+)
 
 # Install headers
 install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})

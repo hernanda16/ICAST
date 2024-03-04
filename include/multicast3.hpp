@@ -6,7 +6,6 @@
 #include <fstream>
 #include <iostream>
 #include <vector>
-#include <fstream>
 
 #include "arpa/inet.h"
 #include "net/if.h"
@@ -18,14 +17,7 @@
 #include "unistd.h"
 #include <sys/time.h>
 
-<<<<<<< HEAD
 class Multicast_3 {
-=======
-#define USE_CHRONO_TIMER
-
-class Multicast_3
-{
->>>>>>> d28ccdf94b11173f904be0829db7f413edcc32b4
 private:
     Multicast_3() { }
 
@@ -63,13 +55,7 @@ private:
      * @param interface The name of the network interface.
      * @param ip The IP address of the network interface.
      */
-<<<<<<< HEAD
     void findInterfaceIP(std::string interface, std::string& ip);
-=======
-    void findInterfaceIP(std::string interface, std::string &ip);
-
-    std::ofstream log_file;
->>>>>>> d28ccdf94b11173f904be0829db7f413edcc32b4
 
 public:
     static Multicast_3* getInstance()

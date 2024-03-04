@@ -42,23 +42,13 @@ void setDataToBeSend(Dictionary* dc_ptr)
     dc_ptr->getOffsetSize(1, "pos", offset, size);
     // std::cout << "Offset: " << offset << " Size: " << size << std::endl;
 
-<<<<<<< HEAD
-    struct data_tag {
+    static struct data_tag {
         float pose[3] = { 1.1, 2098.2, 0.00 };
-=======
-    static struct data_tag
-    {
-        float pose[3] = {1.1, 2098.2, 0.00};
->>>>>>> d28ccdf94b11173f904be0829db7f413edcc32b4
     } data_agent;
 
     std::memcpy(dc_ptr->dictionary_data_.data() + offset, &data_agent, size);
 
-<<<<<<< HEAD
-    dc_ptr->setResetUpdate(1, "pos", false, true);
-=======
     dc_ptr->setResetUpdate(2, "pos", false, true);
 
     data_agent.pose[0] += 0.1;
->>>>>>> d28ccdf94b11173f904be0829db7f413edcc32b4
 }

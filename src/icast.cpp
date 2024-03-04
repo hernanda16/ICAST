@@ -68,12 +68,7 @@ void Icast::update()
     if (mc->readyToSend()) {
         std::vector<uint8_t> selected_data;
         dc->packetProcessTransmit(selected_data);
-<<<<<<< HEAD
         if (selected_data.size() > 0) {
-=======
-        if (selected_data.size() > 0)
-        {
->>>>>>> d28ccdf94b11173f904be0829db7f413edcc32b4
             mc->send(selected_data);
         }
     }
