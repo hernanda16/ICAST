@@ -4,9 +4,9 @@
 #include <fstream>
 #include <vector>
 
-#include "../utils/rapidjson/document.h"
-#include "../utils/rapidjson/stringbuffer.h"
-#include "../utils/rapidjson/writer.h"
+#include "rapidjson/document.h"
+#include "rapidjson/stringbuffer.h"
+#include "rapidjson/writer.h"
 
 #include "iomanip"
 

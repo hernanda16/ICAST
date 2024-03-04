@@ -1,12 +1,11 @@
-#include "../include/icast.hpp"
+#include "icast.hpp"
 
-void Icast::init(bool print_structure)
+void Icast::init(std::string config_path, bool print_structure)
 {
     // Load configuration on .cfg
-    std::ifstream file("../icast.cfg");
+    std::ifstream file(config_path + "icast.cfg");
 
-    if (!file.is_open())
-    {
+    if (!file.is_open()) {
         std::cerr << "Failed to open file" << std::endl;
         return;
     }
@@ -20,10 +19,8 @@ void Icast::init(bool print_structure)
 
     std::string line;
 
-    while (std::getline(file, line))
-    {
-        if (line[0] == '#')
-        {
+    while (std::getline(file, line)) {
+        if (line[0] == '#') {
             continue;
         }
 
@@ -32,33 +29,20 @@ void Icast::init(bool print_structure)
         std::istringstream is_line(line);
         std::string key;
 
-        if (std::getline(is_line, key, '='))
-        {
+        if (std::getline(is_line, key, '=')) {
             std::string value;
-            if (std::getline(is_line, value))
-            {
-                if (key == "agent")
-                {
+            if (std::getline(is_line, value)) {
+                if (key == "agent") {
                     agent = std::stoi(value);
-                }
-                else if (key == "dictionary_path")
-                {
-                    dictionary_path = value;
-                }
-                else if (key == "multicast_ip")
-                {
+                } else if (key == "dictionary_path") {
+                    dictionary_path = config_path + value;
+                } else if (key == "multicast_ip") {
                     multicast_ip = value;
-                }
-                else if (key == "multicast_port")
-                {
+                } else if (key == "multicast_port") {
                     multicast_port = std::stoi(value);
-                }
-                else if (key == "multicast_interface")
-                {
+                } else if (key == "multicast_interface") {
                     multicast_interface = value;
-                }
-                else if (key == "multicast_period_ms")
-                {
+                } else if (key == "multicast_period_ms") {
                     multicast_period_ms = std::stoi(value);
                 }
             }
@@ -66,14 +50,12 @@ void Icast::init(bool print_structure)
     }
 
     dc->init(agent, dictionary_path);
-    if (print_structure)
-    {
+    if (print_structure) {
         dc->structureDisplay();
     }
 
     mc->init(multicast_ip, multicast_port, multicast_interface, multicast_period_ms, MC_LOOPBACK);
-    if (!mc->initialized())
-    {
+    if (!mc->initialized()) {
         std::cout << "Multicast not ready" << std::endl;
         return;
     }
@@ -81,22 +63,19 @@ void Icast::init(bool print_structure)
 
 void Icast::update()
 {
+    mc->tick = mc->millis();
 
-    if (mc->readyToSend())
-    {
+    if (mc->readyToSend()) {
         std::vector<uint8_t> selected_data;
         dc->packetProcessTransmit(selected_data);
-        if (selected_data.size() > 0)
-        {
-            printf("HALO\n");
+        if (selected_data.size() > 0) {
             mc->send(selected_data);
         }
     }
 
     std::vector<uint8_t> received_data;
     mc->recv(received_data);
-    if (received_data.size() > 0)
-    {
+    if (received_data.size() > 0) {
         dc->packetProcessReceive(received_data);
     }
 }

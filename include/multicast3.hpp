@@ -3,6 +3,7 @@
 
 #include <algorithm>
 #include <chrono>
+#include <fstream>
 #include <iostream>
 #include <vector>
 
@@ -16,10 +17,9 @@
 #include "unistd.h"
 #include <sys/time.h>
 
-class Multicast_3
-{
+class Multicast_3 {
 private:
-    Multicast_3() {}
+    Multicast_3() { }
 
     bool initialized_ = false;
 
@@ -31,10 +31,10 @@ private:
     unsigned long int comm_period_ = 1000;
     unsigned long int comm_time_next_tx_ = 0;
     unsigned long int comm_time_last_rx_ = 0;
-    unsigned long int comm_period_min_ = 100;
+    unsigned long int comm_period_min_ = 10;
     unsigned long int comm_period_max_ = 1000;
     float comm_period_threshold_ = 0.1;
-    const uint16_t dead_threshold_ms = 1000;
+    const uint16_t dead_threshold_ms = 5000;
 
     uint8_t tdma_my_ip_;
     uint8_t tdma_my_peer_index_;
@@ -42,6 +42,10 @@ private:
     std::vector<uint8_t> peer_ip;
     std::vector<uint64_t> peer_ts;
     std::vector<uint64_t> peer_prev_ts;
+
+    // Percobaan
+    uint8_t friend_is_online = 0;
+    uint8_t recvd_from_friend = 0;
 
     uint64_t wall_time_start_;
 
@@ -51,7 +55,19 @@ private:
      * @param interface The name of the network interface.
      * @param ip The IP address of the network interface.
      */
-    void findInterfaceIP(std::string interface, std::string &ip);
+    void findInterfaceIP(std::string interface, std::string& ip);
+
+public:
+    static Multicast_3* getInstance()
+    {
+        static Multicast_3 instance_;
+        return &instance_;
+    }
+
+    void operator=(const Multicast_3&) = delete;
+    Multicast_3(Multicast_3& other) = delete;
+
+    std::ofstream log_file;
 
     /**
      * @brief Returns the current time in milliseconds.
@@ -59,16 +75,7 @@ private:
      * @return unsigned long int The current time in milliseconds.
      */
     uint64_t millis();
-
-public:
-    static Multicast_3 *getInstance()
-    {
-        static Multicast_3 instance_;
-        return &instance_;
-    }
-
-    void operator=(const Multicast_3 &) = delete;
-    Multicast_3(Multicast_3 &other) = delete;
+    uint64_t tick;
 
     /**
      * @brief Initializes the multicast object.
@@ -117,7 +124,7 @@ public:
      * @param blocking Whether to block until data is received.
      * @return int The number of bytes received, or -1 if an error occurred.
      */
-    int recv(std::vector<uint8_t> &data, bool blocking = false);
+    int recv(std::vector<uint8_t>& data, bool blocking = false);
 };
 
 #endif

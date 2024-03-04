@@ -1,4 +1,4 @@
-#include "../include/dictionary.hpp"
+#include "dictionary.hpp"
 
 void Dictionary::init(int whoami, std::string path_to_dictionary)
 {
