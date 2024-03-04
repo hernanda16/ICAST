@@ -75,15 +75,6 @@ public:
      * @return unsigned long int The current time in milliseconds.
      */
     uint64_t millis();
-    uint64_t tick;
-
-    /**
-     * @brief Returns the current time in milliseconds.
-     *
-     * @return unsigned long int The current time in milliseconds.
-     */
-    uint64_t millis();
-
     uint64_t tick = 0;
 
     /**
