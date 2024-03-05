@@ -10,6 +10,8 @@
 
 #include "iomanip"
 
+#include "icast_type.h"
+
 typedef struct
 {
     std::string name;
@@ -57,6 +59,8 @@ public:
     // ==========
     std::vector<DictLevel1> dictionary_structure_;
     std::vector<uint8_t> dictionary_data_;
+
+    icast_bus_t data_bus;
 
     /**
      * @brief Initialize dictionary based on dictionary.json
@@ -130,6 +134,15 @@ public:
      * @param packet The received packet
      */
     void packetProcessReceive(const std::vector<uint8_t> packet);
+
+    /**
+     * @brief Set data to be sent
+     *
+     * @param data The data to be sent
+     * @param offset Offset of the data in the dictionary data
+     * @param size Size of the data
+     */
+    void setDataToBeSent(std::string key, void* data_ptr);
 };
 
 #endif

@@ -37,7 +37,7 @@ add_library(icast ${LIB_SOURCES})
 
 # Add executable
 # add_executable(simple ${EXAMPLE_SOURCES} ${LIB_SOURCES})
-# add_executable(simple2 example/simple2.cpp ${LIB_SOURCES})
+add_executable(simple2 example/simple2.cpp ${LIB_SOURCES})
 # add_executable(simple3 example/simple3.cpp)
 
 

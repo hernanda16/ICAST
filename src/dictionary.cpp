@@ -1,4 +1,4 @@
-#include "dictionary.hpp"
+#include "../include/dictionary.hpp"
 
 void Dictionary::init(int whoami, std::string path_to_dictionary)
 {
@@ -418,4 +418,12 @@ void Dictionary::packetProcessReceive(const std::vector<uint8_t> packet)
             }
         }
     }
+}
+
+void Dictionary::setDataToBeSent(std::string key, void* data_ptr)
+{
+    size_t offset, size;
+    getOffsetSize(whoami_, key, offset, size);
+    std::copy((uint8_t*)data_ptr, (uint8_t*)data_ptr + size, dictionary_data_.begin() + offset);
+    setResetUpdate(whoami_, key, false, true);
 }

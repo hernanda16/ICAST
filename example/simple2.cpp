@@ -1,4 +1,4 @@
-#include "icast.hpp"
+#include "../include/icast.hpp"
 #include "keyboard_input/keyboard_input.hpp"
 
 void setDataToBeSend(Dictionary* dc_ptr);
@@ -9,7 +9,7 @@ int main()
     Dictionary* dc = Dictionary::getInstance();
     Multicast_3* mc = Multicast_3::getInstance();
 
-    icast->init();
+    icast->init("../", 1);
 
     while (true) {
         if (kbhit() > 0) {
@@ -46,9 +46,11 @@ void setDataToBeSend(Dictionary* dc_ptr)
         float pose[3] = { 1.1, 2098.2, 0.00 };
     } data_agent;
 
-    std::memcpy(dc_ptr->dictionary_data_.data() + offset, &data_agent, size);
+    dc_ptr->setDataToBeSent("pos", (float*)&data_agent);
 
-    dc_ptr->setResetUpdate(2, "pos", false, true);
+    // std::memcpy(dc_ptr->dictionary_data_.data() + offset, &data_agent, size);
+
+    // dc_ptr->setResetUpdate(2, "pos", false, true);
 
     data_agent.pose[0] += 0.1;
 }

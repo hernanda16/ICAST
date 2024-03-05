@@ -1,7 +1,7 @@
 #ifndef ICAST_HPP
 #define ICAST_HPP
 
-#include "dictionary.hpp"
+#include "../include/dictionary.hpp"
 // #include "multicast.hpp"
 // #include "multicast2.hpp"
 #include "multicast3.hpp"

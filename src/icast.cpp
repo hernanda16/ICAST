@@ -4,6 +4,7 @@ void Icast::init(std::string config_path, bool print_structure)
 {
     // Load configuration on .cfg
     std::ifstream file(config_path + "icast.cfg");
+    printf("Config path: %s\n", (config_path + "icast.cfg").c_str());
 
     if (!file.is_open()) {
         std::cerr << "Failed to open file" << std::endl;
