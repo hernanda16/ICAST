@@ -16,6 +16,13 @@ if(NOT PYTHON_SCRIPT_RESULT EQUAL 0)
     message(FATAL_ERROR "Error running Python script: ${PYTHON_SCRIPT_RESULT}")
 endif()
 
+if(NOT DEFINED ENV{ICAST_DIR})
+    execute_process(
+        COMMAND ${CMAKE_COMMAND} -E echo "Saving icast path..."
+        COMMAND bash -c "echo 'export ICAST_DIR=${CMAKE_CURRENT_SOURCE_DIR}' >> /home/$ENV{USER}/.bashrc"
+    )
+endif()
+
 # Set C++ standard
 # set(CMAKE_CXX_STANDARD 11)
 # set(CMAKE_CXX_STANDARD_REQUIRED True)

@@ -1,6 +1,4 @@
-#include "multicast3.hpp"
-
-#include <fstream>
+#include "../include/multicast3.hpp"
 
 void Multicast_3::findInterfaceIP(std::string interface, std::string& ip)
 {
@@ -39,11 +37,8 @@ uint64_t Multicast_3::millis()
 
 void Multicast_3::init(std::string ip, int port, std::string interface, uint16_t period_ms, uint8_t loopback)
 {
-    log_file.open("../output.csv", std::ios::app);
 
     wall_time_start_ = millis();
-
-    log_file.open("../output.csv", std::ios::app);
 
     std::string interface_ip;
     findInterfaceIP(interface, interface_ip);
@@ -241,19 +236,20 @@ void Multicast_3::addToPeer(uint32_t ip)
         prev_mean = mean_friend_period;
 
         float div_ = mean_friend_period / comm_period_;
-        // if (div_ < 1.35)
-        //     comm_period_ -= 2;
-        // else
-        //     comm_period_ += 2;
+        if (div_ < comm_period_threshold_)
+            comm_period_ -= 3;
+        else
+            comm_period_ += 1;
 
-        // if (comm_period_ < comm_period_min_)
-        //     comm_period_ = comm_period_min_;
-        // else if (comm_period_ > comm_period_max_)
-        //     comm_period_ = comm_period_max_;
+        if (comm_period_ < comm_period_min_)
+            comm_period_ = comm_period_min_;
+        else if (comm_period_ > comm_period_max_)
+            comm_period_ = comm_period_max_;
 
-        log_file << peer_ts[recv_from_index] << std::endl;
-
-        printf("recv_at: %d %d || REAL %d || mean %.2f || d_mean %.2f\n", tick, peer_ts[recv_from_index], peer_period, mean_friend_period, derivative_period);
+        static char* icast_debug = getenv("ICAST_DEBUG");
+        if (icast_debug != NULL) {
+            printf("recv_at: %d %d || REAL %d || mean %.2f || d_mean %.2f\n", tick, peer_ts[recv_from_index], peer_period, mean_friend_period, derivative_period);
+        }
 
         comm_time_next_tx_ = peer_ts[recv_from_index] + ((int64_t)comm_period_ / peer_ip.size());
     }
@@ -272,8 +268,12 @@ bool Multicast_3::readyToSend()
     const uint64_t time_now = tick;
 
     if (time_now >= comm_time_next_tx_) {
-        printf("MASUK KIRIM %d %d ============= (%d)\n", time_now, comm_time_next_tx_, comm_period_);
-        log_file << comm_time_next_tx_ << ",";
+
+        static char* icast_debug = getenv("ICAST_DEBUG");
+        if (icast_debug != NULL) {
+            printf("MASUK KIRIM %d %d ============= (%d)\n", time_now, comm_time_next_tx_, comm_period_);
+        }
+
         updatePeers(tdma_my_ip_);
 
         // Calculate next transmission time

@@ -31,10 +31,10 @@ private:
     unsigned long int comm_period_ = 1000;
     unsigned long int comm_time_next_tx_ = 0;
     unsigned long int comm_time_last_rx_ = 0;
-    unsigned long int comm_period_min_ = 10;
-    unsigned long int comm_period_max_ = 1000;
-    float comm_period_threshold_ = 0.1;
-    const uint16_t dead_threshold_ms = 5000;
+    unsigned long int comm_period_min_ = 40;
+    unsigned long int comm_period_max_ = 200;
+    float comm_period_threshold_ = 1.35;
+    const uint16_t dead_threshold_ms = 2000;
 
     uint8_t tdma_my_ip_;
     uint8_t tdma_my_peer_index_;

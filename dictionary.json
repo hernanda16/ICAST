@@ -3,85 +3,182 @@
     "command": {
       "data": "uint1"
     },
-    "pos_offset": {
-      "agent": "uint1",
-      "x": "float4",
-      "y": "float4",
-      "theta": "float4"
+    "mode_base": {
+      "data": "uint1"
     },
-    "vel_scale": {
-      "agent": "uint1",
-      "translation": "float4",
-      "rotation": "float4"
+    "style":{
+      "data": "uint1"
+    },
+    "target_manual":{
+      "x": "int2",
+      "y": "int2",
+      "theta": "int2"
+    },
+    "offset_robot":{
+      "x": "int2",
+      "y": "int2",
+      "theta": "int2"
+    },
+    "data_mux":{
+      "mux_1":"uint1",
+      "mux_2":"uint1",
+      "mux_control":"uint1"
+    },
+    "trim":{
+      "translation_vel": "uint1[5]",
+      "rotation_vel": "uint1[5]",
+      "kick_power": "uint1[5]"
+    },
+    "pass_counter":{
+      "data": "uint1"
     }
+
   },
   "agent1": {
     "pos": {
-      "x": "float4",
-      "y": "float4",
-      "theta": "float4"
+      "x": "int2",
+      "y": "int2",
+      "theta": "int2"
     },
     "vel": {
-      "x": "float4",
-      "y": "float4",
-      "theta": "float4"
+      "x": "int2",
+      "y": "int2",
+      "theta": "int2"
     },
     "ball": {
       "is_caught": "uint1",
       "is_visible": "uint1",
-      "x": "float4[5]",
-      "y": "float4[5]",
-      "vx": "float4[5]",
-      "vy": "float4[5]"
+      "x": "int2[5]",
+      "y": "int2[5]",
+      "vx": "int2[5]",
+      "vy": "int2[5]"
     },
-    "laserscan": {
-      "distance": "float4[144]"
+    "state_machine":{
+      "robot_condition": "int2",
+      "fsm_0": "int2",
+      "fsm_1": "int2",
+      "fsm_2": "int2"
+    },
+    "passing":{
+      "data": "uint1",
+      "target_x": "int2",
+      "target_y": "int2"
+    },
+    "obstacle": {
+      "pcl_x": "int2",
+      "pcl_y": "int2"
+    },
+    "battery": {
+      "voltage": "int2"
+    },
+    "keeper_on_field":{
+      "target_x": "int2",
+      "target_y": "int2"
+    },
+    "prediction":{
+      "ball_x": "int2",
+      "ball_y": "int2"
+    },
+    "epoch":{
+      "data": "uint1"
     }
   },
   "agent2": {
     "pos": {
-      "x": "float4",
-      "y": "float4",
-      "theta": "float4"
+      "x": "int2",
+      "y": "int2",
+      "theta": "int2"
     },
     "vel": {
-      "x": "float4",
-      "y": "float4",
-      "theta": "float4"
+      "x": "int2",
+      "y": "int2",
+      "theta": "int2"
     },
     "ball": {
       "is_caught": "uint1",
       "is_visible": "uint1",
-      "x": "float4[5]",
-      "y": "float4[5]",
-      "vx": "float4[5]",
-      "vy": "float4[5]"
+      "x": "int2[5]",
+      "y": "int2[5]",
+      "vx": "int2[5]",
+      "vy": "int2[5]"
     },
-    "laserscan": {
-      "distance": "float4[144]"
+    "state_machine":{
+      "robot_condition": "int2",
+      "fsm_0": "int2",
+      "fsm_1": "int2",
+      "fsm_2": "int2"
+    },
+    "passing":{
+      "data": "uint1",
+      "target_x": "int2",
+      "target_y": "int2"
+    },
+    "obstacle": {
+      "pcl_x": "int2",
+      "pcl_y": "int2"
+    },
+    "battery": {
+      "voltage": "int2"
+    },
+    "keeper_on_field":{
+      "target_x": "int2",
+      "target_y": "int2"
+    },
+    "prediction":{
+      "ball_x": "int2",
+      "ball_y": "int2"
+    },
+    "epoch":{
+      "data": "uint1"
     }
   },
   "agent3": {
     "pos": {
-      "x": "float4",
-      "y": "float4",
-      "theta": "float4"
+      "x": "int2",
+      "y": "int2",
+      "theta": "int2"
     },
     "vel": {
-      "x": "float4",
-      "y": "float4",
-      "theta": "float4"
+      "x": "int2",
+      "y": "int2",
+      "theta": "int2"
     },
     "ball": {
       "is_caught": "uint1",
       "is_visible": "uint1",
-      "x": "float4[5]",
-      "y": "float4[5]",
-      "vx": "float4[5]",
-      "vy": "float4[5]"
+      "x": "int2[5]",
+      "y": "int2[5]",
+      "vx": "int2[5]",
+      "vy": "int2[5]"
     },
-    "laserscan": {
-      "distance": "float4[144]"
+    "state_machine":{
+      "robot_condition": "int2",
+      "fsm_0": "int2",
+      "fsm_1": "int2",
+      "fsm_2": "int2"
+    },
+    "passing":{
+      "data": "uint1",
+      "target_x": "int2",
+      "target_y": "int2"
+    },
+    "obstacle": {
+      "pcl_x": "int2",
+      "pcl_y": "int2"
+    },
+    "battery": {
+      "voltage": "int2"
+    },
+    "keeper_on_field":{
+      "target_x": "int2",
+      "target_y": "int2"
+    },
+    "prediction":{
+      "ball_x": "int2",
+      "ball_y": "int2"
+    },
+    "epoch":{
+      "data": "uint1"
     }
   }
 }

@@ -401,13 +401,6 @@ void Dictionary::packetProcessReceive(const std::vector<uint8_t> packet)
         std::copy(packet.begin() + index, packet.begin() + index + size, dictionary_data_.begin() + offset);
         index += size;
 
-        // Publish the updated data to the irisdb_output topic
-        // irisdb_interfaces::msg::Output msg_irisdb_output;
-        // msg_irisdb_output.offset = offset;
-        // msg_irisdb_output.size = size;
-        // msg_irisdb_output.value = std::vector<uint8_t>(dictionary_data_.begin() + offset, dictionary_data_.begin() + offset + size);
-        // pub_irisdb_output_->publish(msg_irisdb_output);
-
         // Search for the updated field in the dictionary structure and set the update flag
         for (auto& level1 : dictionary_structure_) {
             for (auto& level2 : level1.fields) {

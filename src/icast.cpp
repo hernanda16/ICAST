@@ -2,9 +2,14 @@
 
 void Icast::init(std::string config_path, bool print_structure)
 {
+    if (config_path == "") {
+        char* icast_cfg_path = getenv("ICAST_DIR");
+
+        config_path = icast_cfg_path;
+    }
+
     // Load configuration on .cfg
-    std::ifstream file(config_path + "icast.cfg");
-    printf("Config path: %s\n", (config_path + "icast.cfg").c_str());
+    std::ifstream file(config_path + "/icast.cfg");
 
     if (!file.is_open()) {
         std::cerr << "Failed to open file" << std::endl;
@@ -36,7 +41,7 @@ void Icast::init(std::string config_path, bool print_structure)
                 if (key == "agent") {
                     agent = std::stoi(value);
                 } else if (key == "dictionary_path") {
-                    dictionary_path = config_path + value;
+                    dictionary_path = config_path + "/" + value;
                 } else if (key == "multicast_ip") {
                     multicast_ip = value;
                 } else if (key == "multicast_port") {
@@ -79,4 +84,6 @@ void Icast::update()
     if (received_data.size() > 0) {
         dc->packetProcessReceive(received_data);
     }
+
+    memcpy((void*)&dc->data_bus, &dc->dictionary_data_[0], sizeof(icast_bus_t));
 }
