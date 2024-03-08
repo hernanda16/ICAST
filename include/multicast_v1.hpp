@@ -1,13 +1,14 @@
 #ifndef MULTICAST_V1_HPP
 #define MULTICAST_V1_HPP
 
-#include "../include/multicast_abstract.hpp"
+#include "multicast_abstract.hpp"
 
-class Multicast_v1 : public Multicast {
+class Multicast_v1 : public Multicast
+{
 private:
 public:
-    Multicast_v1() { }
-    ~Multicast_v1() { }
+    Multicast_v1() {}
+    ~Multicast_v1() {}
 
     bool readyToSend()
     {
@@ -17,7 +18,7 @@ public:
     {
         printf("send V1\n");
     }
-    int recv(std::vector<uint8_t>& data, bool blocking = false)
+    int recv(std::vector<uint8_t> &data, bool blocking = false)
     {
         printf("recv V1\n");
     }

@@ -24,14 +24,14 @@ typedef struct
 {
     int16_t x;
     int16_t y;
-    int16_t theta;
+    float theta;
 } target_manual_t;
 
 typedef struct
 {
     int16_t x;
     int16_t y;
-    int16_t theta;
+    float theta;
 } offset_robot_t;
 
 typedef struct
@@ -57,14 +57,14 @@ typedef struct
 {
     int16_t x;
     int16_t y;
-    int16_t theta;
+    float theta;
 } pos_t;
 
 typedef struct
 {
     int16_t x;
     int16_t y;
-    int16_t theta;
+    float theta;
 } vel_t;
 
 typedef struct

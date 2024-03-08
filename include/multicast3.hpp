@@ -17,9 +17,10 @@
 #include "unistd.h"
 #include <sys/time.h>
 
-class Multicast_3 {
+class Multicast_3
+{
 private:
-    Multicast_3() { }
+    Multicast_3() {}
 
     bool initialized_ = false;
 
@@ -55,17 +56,17 @@ private:
      * @param interface The name of the network interface.
      * @param ip The IP address of the network interface.
      */
-    void findInterfaceIP(std::string interface, std::string& ip);
+    void findInterfaceIP(std::string interface, std::string &ip);
 
 public:
-    static Multicast_3* getInstance()
+    static Multicast_3 *getInstance()
     {
         static Multicast_3 instance_;
         return &instance_;
     }
 
-    void operator=(const Multicast_3&) = delete;
-    Multicast_3(Multicast_3& other) = delete;
+    void operator=(const Multicast_3 &) = delete;
+    Multicast_3(Multicast_3 &other) = delete;
 
     std::ofstream log_file;
 
@@ -124,7 +125,7 @@ public:
      * @param blocking Whether to block until data is received.
      * @return int The number of bytes received, or -1 if an error occurred.
      */
-    int recv(std::vector<uint8_t>& data, bool blocking = false);
+    int recv(std::vector<uint8_t> &data, bool blocking = false);
 };
 
 #endif

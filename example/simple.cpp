@@ -1,49 +1,64 @@
-#include "../include/icast.hpp"
-#include "keyboard_input/keyboard_input.hpp"
+#include "icast.hpp"
 
-void setDataToBeSend(Dictionary* dc_ptr);
+void set_data_to_be_send();
+void get_some_data_from_icast_bus();
 
 int main()
 {
-    Icast* icast = Icast::getInstance();
-    Dictionary* dc = Dictionary::getInstance();
-    Multicast* mc = Multicast::getInstance();
+    Icast *icast = Icast::getInstance();
 
     icast->init();
 
-    while (true) {
-        if (kbhit() > 0) {
-            char key = std::cin.get();
+    if (!icast->mc->initialized())
+    {
+        return -1;
+    }
 
-            if (key == 's') {
-                setDataToBeSend(dc);
-            }
-        }
+    while (1)
+    {
+        set_data_to_be_send();
 
         icast->update();
 
-        float pose[3];
-        size_t offset, size;
-        dc->getOffsetSize(2, "pos", offset, size);
-        std::memcpy(pose, dc->dictionary_data_.data() + offset, size);
-        std::cout << "Pose: " << pose[0] << " " << pose[1] << " " << pose[2] << std::endl;
+        get_some_data_from_icast_bus();
+
+        usleep(1000000);
     }
 
     return 0;
 }
 
-void setDataToBeSend(Dictionary* dc_ptr)
+void set_data_to_be_send()
 {
-    size_t offset, size;
-    dc_ptr->getOffsetSize(0, "pos_offset", offset, size);
-    std::cout << "Offset: " << offset << " Size: " << size << std::endl;
+    static Icast *icast = Icast::getInstance();
 
-    struct data_tag {
-        uint8_t agent = 2;
-        float pose[3] = { 1.1, 2.2, 0.00 };
-    } data_agent;
+    static pos_t pos;
 
-    std::memcpy(dc_ptr->dictionary_data_.data() + offset, &data_agent, size);
+    static uint8_t first_init = 1;
 
-    dc_ptr->setResetUpdate(0, "pos_offset", false, true);
+    if (first_init == 1)
+    {
+        pos.x = 123;
+        pos.y = 321;
+        pos.theta = 10.2;
+
+        first_init = 0;
+    }
+
+    icast->dc->setDataToBeSent("pos", (void *)&pos);
+
+    pos.x++;
+}
+
+void get_some_data_from_icast_bus()
+{
+    static Icast *icast = Icast::getInstance();
+
+    pos_t my_pos;
+
+    memcpy(&my_pos, &icast->dc->data_bus.agent1.pos.x, sizeof(pos_t));
+
+    my_pos.x = icast->dc->data_bus.agent1.pos.x;
+
+    printf("MY POS: %d %d %.2f\n", my_pos.x, my_pos.y, my_pos.theta);
 }

@@ -27,6 +27,9 @@ endif()
 # set(CMAKE_CXX_STANDARD 11)
 # set(CMAKE_CXX_STANDARD_REQUIRED True)
 
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/utils)
+
 # Add source files
 set(EXAMPLE_SOURCES
     example/simple.cpp
@@ -43,9 +46,8 @@ set(LIB_SOURCES
 add_library(icast ${LIB_SOURCES})
 
 # Add executable
-# add_executable(simple ${EXAMPLE_SOURCES} ${LIB_SOURCES})
-add_executable(simple2 example/simple2.cpp ${LIB_SOURCES})
-# add_executable(simple3 example/simple3.cpp)
+add_executable(simple example/simple.cpp)
+target_link_libraries(simple icast)
 
 
 # Add support for installation
@@ -74,7 +76,6 @@ install(TARGETS icast
   EXPORT ${PROJECT_NAME}-targets
   ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-#   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
 
 set(icast_INSTALL_CONFIGDIR ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME})

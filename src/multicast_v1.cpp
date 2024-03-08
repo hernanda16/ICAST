@@ -1,4 +1,4 @@
-#include "../include/multicast_v1.hpp"
+#include "multicast_v1.hpp"
 
 bool Multicast_v1::readyToSend()
 {
@@ -31,6 +31,6 @@ int Multicast_v1::send(std::vector<uint8_t> data, bool blocking)
 {
 }
 
-int Multicast_v1::recv(std::vector<uint8_t>& data, bool blocking)
+int Multicast_v1::recv(std::vector<uint8_t> &data, bool blocking)
 {
 }
