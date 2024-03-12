@@ -23,10 +23,6 @@ if(NOT DEFINED ENV{ICAST_DIR})
     )
 endif()
 
-# Set C++ standard
-# set(CMAKE_CXX_STANDARD 11)
-# set(CMAKE_CXX_STANDARD_REQUIRED True)
-
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/utils)
 
@@ -37,8 +33,6 @@ set(EXAMPLE_SOURCES
 
 set(LIB_SOURCES
     src/dictionary.cpp
-    src/multicast.cpp
-    src/multicast2.cpp
     src/multicast3.cpp
     src/icast.cpp
  )
@@ -48,10 +42,6 @@ add_library(icast ${LIB_SOURCES})
 # Add executable
 add_executable(simple example/simple.cpp)
 target_link_libraries(simple icast)
-
-
-# Add support for installation
-# include(CMakePackageConfigHelpers)
 
 set(CMAKE_INSTALL_INCLUDEDIR /usr/local/include)
 set(CMAKE_INSTALL_LIBDIR /usr/local/lib)
@@ -67,9 +57,6 @@ install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 
 # Install rapidjson
 install(DIRECTORY utils/rapidjson DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
-
-# Install keyboardinput
-install(DIRECTORY utils/keyboard_input DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 
 # Install library
 install(TARGETS icast

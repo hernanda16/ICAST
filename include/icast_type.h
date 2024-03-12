@@ -94,8 +94,8 @@ typedef struct
 
 typedef struct
 {
-    int16_t pcl_x;
-    int16_t pcl_y;
+    int16_t pcl_x[180];
+    int16_t pcl_y[180];
 } obstacle_t;
 
 typedef struct
