@@ -65,8 +65,8 @@
       "target_y": "int2"
     },
     "obstacle": {
-      "pcl_x": "int2",
-      "pcl_y": "int2"
+      "pcl_x": "int2[360]",
+      "pcl_y": "int2[360]"
     },
     "battery": {
       "voltage": "int2"
@@ -114,8 +114,8 @@
       "target_y": "int2"
     },
     "obstacle": {
-      "pcl_x": "int2",
-      "pcl_y": "int2"
+      "pcl_x": "int2[360]",
+      "pcl_y": "int2[360]"
     },
     "battery": {
       "voltage": "int2"
@@ -163,8 +163,8 @@
       "target_y": "int2"
     },
     "obstacle": {
-      "pcl_x": "int2",
-      "pcl_y": "int2"
+      "pcl_x": "int2[360]",
+      "pcl_y": "int2[360]"
     },
     "battery": {
       "voltage": "int2"
