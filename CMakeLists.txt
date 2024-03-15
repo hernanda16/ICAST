@@ -6,7 +6,7 @@ set(PYTHON_SCRIPT ${CMAKE_CURRENT_SOURCE_DIR}/icast_idl.py)
 
 execute_process(
     COMMAND ${CMAKE_COMMAND} -E echo "Running icast_idl..."
-    COMMAND python ${PYTHON_SCRIPT} dictionary.json
+    COMMAND python3 ${PYTHON_SCRIPT} dictionary.json
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     RESULT_VARIABLE PYTHON_SCRIPT_RESULT
 )

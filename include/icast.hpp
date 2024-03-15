@@ -15,6 +15,8 @@ private:
 
     uint8_t mc_loopback;
 
+    std::string dictionary_path;
+
 public:
     static Icast* getInstance()
     {

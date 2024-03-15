@@ -4,8 +4,11 @@ void Icast::init(std::string config_path, bool print_structure)
 {
     if (config_path == "") {
         char* icast_cfg_path = getenv("ICAST_DIR");
-
+        dictionary_path = icast_cfg_path;
         config_path = icast_cfg_path;
+    } else {
+        char* icast_cfg_path = getenv("ICAST_DIR");
+        dictionary_path = icast_cfg_path;
     }
 
     // Load configuration on .cfg
@@ -41,7 +44,7 @@ void Icast::init(std::string config_path, bool print_structure)
                 if (key == "agent") {
                     agent = std::stoi(value);
                 } else if (key == "dictionary_path") {
-                    dictionary_path = config_path + "/" + value;
+                    dictionary_path = dictionary_path + "/" + value;
                 } else if (key == "multicast_ip") {
                     multicast_ip = value;
                 } else if (key == "multicast_port") {
