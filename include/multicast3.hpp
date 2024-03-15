@@ -86,7 +86,7 @@ public:
      * @param period_ms The period of the multicast communication in milliseconds.
      * @param loopback Whether to enable loopback mode (able recv myself).
      */
-    void init(std::string ip, int port, std::string interface, uint16_t period_ms, uint8_t loopback = 0);
+    void init(std::string ip, int port, std::string interface, uint16_t period_ms, uint16_t period_min, uint16_t period_max, uint8_t loopback = 0);
 
     /**
      * @brief Updates the TDMA peers sequence and period based on the current time.

@@ -35,7 +35,7 @@ uint64_t Multicast_3::millis()
 #endif
 }
 
-void Multicast_3::init(std::string ip, int port, std::string interface, uint16_t period_ms, uint8_t loopback)
+void Multicast_3::init(std::string ip, int port, std::string interface, uint16_t period_ms, uint16_t period_min, uint16_t period_max, uint8_t loopback)
 {
 
     wall_time_start_ = millis();
@@ -103,6 +103,8 @@ void Multicast_3::init(std::string ip, int port, std::string interface, uint16_t
     }
 
     comm_period_ = period_ms;
+    comm_period_min_ = period_min;
+    comm_period_max_ = period_max;
     unsigned long int now = millis();
     comm_time_next_tx_ = now;
     comm_time_last_rx_ = now;
@@ -235,16 +237,18 @@ void Multicast_3::addToPeer(uint32_t ip)
         float derivative_period = mean_friend_period - prev_mean;
         prev_mean = mean_friend_period;
 
-        float div_ = mean_friend_period / comm_period_;
-        if (div_ < comm_period_threshold_)
-            comm_period_ -= 3;
-        else
-            comm_period_ += 1;
+        if (comm_period_min_ != comm_period_max_) {
+            float div_ = mean_friend_period / comm_period_;
+            if (div_ < comm_period_threshold_)
+                comm_period_ -= 3;
+            else
+                comm_period_ += 1;
 
-        if (comm_period_ < comm_period_min_)
-            comm_period_ = comm_period_min_;
-        else if (comm_period_ > comm_period_max_)
-            comm_period_ = comm_period_max_;
+            if (comm_period_ < comm_period_min_)
+                comm_period_ = comm_period_min_;
+            else if (comm_period_ > comm_period_max_)
+                comm_period_ = comm_period_max_;
+        }
 
         static char* icast_debug = getenv("ICAST_DEBUG");
         if (icast_debug != NULL) {

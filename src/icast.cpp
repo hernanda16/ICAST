@@ -27,6 +27,8 @@ void Icast::init(std::string config_path, bool print_structure)
     int multicast_port;
     std::string multicast_interface;
     int multicast_period_ms;
+    int multicast_period_min;
+    int multicast_period_max;
 
     std::string line;
 
@@ -55,6 +57,10 @@ void Icast::init(std::string config_path, bool print_structure)
                     multicast_interface = value;
                 } else if (key == "multicast_period_ms") {
                     multicast_period_ms = std::stoi(value);
+                } else if (key == "multicast_period_min") {
+                    multicast_period_min = std::stoi(value);
+                } else if (key == "multicast_period_max") {
+                    multicast_period_max = std::stoi(value);
                 }
             }
         }
@@ -65,7 +71,7 @@ void Icast::init(std::string config_path, bool print_structure)
         dc->structureDisplay();
     }
 
-    mc->init(multicast_ip, multicast_port, multicast_interface, multicast_period_ms, this->mc_loopback);
+    mc->init(multicast_ip, multicast_port, multicast_interface, multicast_period_ms, multicast_period_min, multicast_period_max, this->mc_loopback);
     if (!mc->initialized()) {
         std::cout << "Multicast not ready" << std::endl;
         return;
