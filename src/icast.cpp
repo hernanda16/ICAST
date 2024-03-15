@@ -4,12 +4,14 @@ void Icast::init(std::string config_path, bool print_structure)
 {
     if (config_path == "") {
         char* icast_cfg_path = getenv("ICAST_DIR");
-        dictionary_path = icast_cfg_path;
+        dict_path = icast_cfg_path;
         config_path = icast_cfg_path;
     } else {
         char* icast_cfg_path = getenv("ICAST_DIR");
-        dictionary_path = icast_cfg_path;
+        dict_path = icast_cfg_path;
     }
+
+    printf("config : %s %s\n", config_path.c_str(), dict_path.c_str());
 
     // Load configuration on .cfg
     std::ifstream file(config_path + "/icast.cfg");
@@ -44,7 +46,7 @@ void Icast::init(std::string config_path, bool print_structure)
                 if (key == "agent") {
                     agent = std::stoi(value);
                 } else if (key == "dictionary_path") {
-                    dictionary_path = dictionary_path + "/" + value;
+                    dictionary_path = dict_path + "/" + value;
                 } else if (key == "multicast_ip") {
                     multicast_ip = value;
                 } else if (key == "multicast_port") {
