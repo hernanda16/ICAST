@@ -7,6 +7,7 @@ int main()
 {
     Icast *icast = Icast::getInstance();
 
+    icast->setMcLoopback(1);
     icast->init();
 
     if (!icast->mc->initialized())
@@ -18,9 +19,13 @@ int main()
     {
         set_data_to_be_send();
 
-        icast->update();
+        icast->update_send();
+        icast->update_receive();
 
-        get_some_data_from_icast_bus();
+        if (icast->dc->isUpdateRemote())
+        {
+            get_some_data_from_icast_bus(); // This will only printed if mc loopback is activated or recv data from another computer
+        }
 
         usleep(1000000);
     }

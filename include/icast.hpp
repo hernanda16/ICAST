@@ -3,8 +3,10 @@
 
 #include "dictionary.hpp"
 #include "multicast3.hpp"
+#include <sched.h>
 
-class Icast {
+class Icast
+{
 private:
     Icast()
     {
@@ -18,20 +20,22 @@ private:
     std::string dict_path;
 
 public:
-    static Icast* getInstance()
+    static Icast *getInstance()
     {
         static Icast instance_;
         return &instance_;
     }
 
-    void operator=(const Icast&) = delete;
-    Icast(Icast& other) = delete;
+    void operator=(const Icast &) = delete;
+    Icast(Icast &other) = delete;
 
-    Dictionary* dc;
-    Multicast_3* mc;
+    Dictionary *dc;
+    Multicast_3 *mc;
 
     void init(std::string config_path = "", bool print_structure = true);
     void update();
+    void update_send();
+    void update_receive();
     void setMcLoopback(uint8_t mc_loopback);
 };
 

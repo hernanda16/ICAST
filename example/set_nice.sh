@@ -1,0 +1,1 @@
+sudo setcap cap_sys_nice=eip $1
