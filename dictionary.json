@@ -6,33 +6,35 @@
     "mode_base": {
       "data": "uint1"
     },
-    "style":{
+    "style": {
       "data": "uint1"
     },
-    "target_manual":{
+    "target_manual": {
       "x": "int2",
       "y": "int2",
       "theta": "float4"
     },
-    "offset_robot":{
+    "offset_robot": {
       "x": "int2",
       "y": "int2",
       "theta": "float4"
     },
-    "data_mux":{
-      "mux_1":"uint1",
-      "mux_2":"uint1",
-      "mux_control":"uint1"
+    "data_mux": {
+      "mux_1": "uint1",
+      "mux_2": "uint1",
+      "mux_control": "uint1"
     },
-    "trim":{
+    "trim": {
       "translation_vel": "uint1[5]",
       "rotation_vel": "uint1[5]",
       "kick_power": "uint1[5]"
     },
-    "pass_counter":{
+    "pass_counter": {
       "data": "uint1"
+    },
+    "index_obs": {
+      "data": "uint1[3]"
     }
-
   },
   "agent1": {
     "pos": {
@@ -53,13 +55,13 @@
       "vx": "int2[5]",
       "vy": "int2[5]"
     },
-    "state_machine":{
+    "state_machine": {
       "robot_condition": "int2",
       "fsm_0": "int2",
       "fsm_1": "int2",
       "fsm_2": "int2"
     },
-    "passing":{
+    "passing": {
       "data": "uint1",
       "target_x": "int2",
       "target_y": "int2"
@@ -71,15 +73,15 @@
     "battery": {
       "voltage": "int2"
     },
-    "keeper_on_field":{
+    "keeper_on_field": {
       "target_x": "int2",
       "target_y": "int2"
     },
-    "prediction":{
+    "prediction": {
       "ball_x": "int2",
       "ball_y": "int2"
     },
-    "epoch":{
+    "epoch": {
       "data": "uint1"
     }
   },
@@ -102,13 +104,13 @@
       "vx": "int2[5]",
       "vy": "int2[5]"
     },
-    "state_machine":{
+    "state_machine": {
       "robot_condition": "int2",
       "fsm_0": "int2",
       "fsm_1": "int2",
       "fsm_2": "int2"
     },
-    "passing":{
+    "passing": {
       "data": "uint1",
       "target_x": "int2",
       "target_y": "int2"
@@ -120,15 +122,15 @@
     "battery": {
       "voltage": "int2"
     },
-    "keeper_on_field":{
+    "keeper_on_field": {
       "target_x": "int2",
       "target_y": "int2"
     },
-    "prediction":{
+    "prediction": {
       "ball_x": "int2",
       "ball_y": "int2"
     },
-    "epoch":{
+    "epoch": {
       "data": "uint1"
     }
   },
@@ -151,13 +153,13 @@
       "vx": "int2[5]",
       "vy": "int2[5]"
     },
-    "state_machine":{
+    "state_machine": {
       "robot_condition": "int2",
       "fsm_0": "int2",
       "fsm_1": "int2",
       "fsm_2": "int2"
     },
-    "passing":{
+    "passing": {
       "data": "uint1",
       "target_x": "int2",
       "target_y": "int2"
@@ -169,15 +171,15 @@
     "battery": {
       "voltage": "int2"
     },
-    "keeper_on_field":{
+    "keeper_on_field": {
       "target_x": "int2",
       "target_y": "int2"
     },
-    "prediction":{
+    "prediction": {
       "ball_x": "int2",
       "ball_y": "int2"
     },
-    "epoch":{
+    "epoch": {
       "data": "uint1"
     }
   }

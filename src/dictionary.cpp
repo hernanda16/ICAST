@@ -421,3 +421,19 @@ void Dictionary::setDataToBeSent(std::string key, void* data_ptr)
     std::copy((uint8_t*)data_ptr, (uint8_t*)data_ptr + size, dictionary_data_.begin() + offset);
     setResetUpdate(whoami_, key, false, true);
 }
+
+bool Dictionary::isUpdateRemote()
+{
+    bool ret_temp = false;
+
+    // Search for the updated field in the dictionary structure and set the update flag
+    for (auto& level1 : dictionary_structure_) {
+        for (auto& level2 : level1.fields) {
+            if (level2.isUpdatedRemote == true) {
+                level2.isUpdatedRemote = false;
+                ret_temp = true;
+            }
+        }
+    }
+    return ret_temp;
+}

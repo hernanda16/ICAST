@@ -55,6 +55,11 @@ typedef struct
 
 typedef struct
 {
+    uint8_t data[3];
+} index_obs_t;
+
+typedef struct
+{
     int16_t x;
     int16_t y;
     float theta;
@@ -132,6 +137,7 @@ typedef struct
     data_mux_t data_mux;
     trim_t trim;
     pass_counter_t pass_counter;
+    index_obs_t index_obs;
 } agent0_t;
 
 typedef struct

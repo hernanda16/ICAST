@@ -50,7 +50,7 @@ public:
     void operator=(const Dictionary&) = delete;
     Dictionary(Dictionary& other) = delete;
 
-    //Parameter
+    // Parameter
     //=========
     int whoami_;
     std::string path_to_dictionary_;
@@ -143,6 +143,8 @@ public:
      * @param size Size of the data
      */
     void setDataToBeSent(std::string key, void* data_ptr);
+
+    bool isUpdateRemote();
 };
 
 #endif
