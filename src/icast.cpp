@@ -89,6 +89,9 @@ void Icast::init(std::string config_path, bool print_structure)
         }
     }
 
+#ifdef USE_FIFO
+    printf("Setting FIFO scheduler...\n");
+    printf("DONT USE -DUSE_FIFO to avoid this\n");
     struct sched_param proc_sched;
     proc_sched.sched_priority = 1;
     if (sched_setscheduler(0, SCHED_FIFO, &proc_sched) != 0)
@@ -96,6 +99,7 @@ void Icast::init(std::string config_path, bool print_structure)
         std::cerr << "Failed to set scheduler" << std::endl;
         return;
     }
+#endif
 
     dc->init(agent, dictionary_path);
     if (print_structure)

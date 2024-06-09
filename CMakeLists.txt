@@ -23,6 +23,9 @@ if(NOT DEFINED ENV{ICAST_DIR})
     )
 endif()
 
+# Options
+option(USE_FIFO "Using FIFO scheduler" OFF)
+
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/utils)
 
@@ -39,9 +42,19 @@ set(LIB_SOURCES
 
 add_library(icast ${LIB_SOURCES})
 
+if(USE_FIFO)
+    target_compile_definitions(icast PUBLIC USE_FIFO)
+endif()
+
+
+
 # Add executable
-add_executable(simple example/simple.cpp)
-target_link_libraries(simple icast)
+add_executable(simple_icast example/simple_icast.cpp)
+target_link_libraries(simple_icast icast)
+
+add_executable(basic_shmem_write example/basic_shmem_write.cpp)
+add_executable(basic_shmem_read example/basic_shmem_read.cpp)
+# target_link_libraries(simple icast)
 
 set(CMAKE_INSTALL_INCLUDEDIR /usr/local/include)
 set(CMAKE_INSTALL_LIBDIR /usr/local/lib)

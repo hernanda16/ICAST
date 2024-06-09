@@ -33,5 +33,9 @@ You can run a simple demo program in ./example/
 
 ```
 cd $ICAST_DIR/build
-./simple
+./simple_icast
 ```
+
+## Note
+
+Use `cmake -DUSE_FIFO=ON ..` to compile it using FIFO scheduler
