@@ -49,11 +49,11 @@ endif()
 
 
 # Add executable
-add_executable(simple_icast example/simple_icast.cpp)
-target_link_libraries(simple_icast icast)
+# add_executable(simple_icast example/simple_icast.cpp)
+# target_link_libraries(simple_icast icast)
 
-add_executable(basic_shmem_write example/basic_shmem_write.cpp)
-add_executable(basic_shmem_read example/basic_shmem_read.cpp)
+# add_executable(basic_shmem_write example/basic_shmem_write.cpp)
+# add_executable(basic_shmem_read example/basic_shmem_read.cpp)
 # target_link_libraries(simple icast)
 
 set(CMAKE_INSTALL_INCLUDEDIR /usr/local/include)

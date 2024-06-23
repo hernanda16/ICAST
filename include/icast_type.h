@@ -24,21 +24,21 @@ typedef struct
 {
     int16_t x;
     int16_t y;
-    float theta;
+    int16_t theta;
 } target_manual_t;
 
 typedef struct
 {
     int16_t x;
     int16_t y;
-    float theta;
+    int16_t theta;
 } offset_robot_t;
 
 typedef struct
 {
-    uint8_t mux_1;
-    uint8_t mux_2;
-    uint8_t mux_control;
+    uint16_t mux_1;
+    uint16_t mux_2;
+    uint16_t mux_control;
 } data_mux_t;
 
 typedef struct
@@ -99,8 +99,8 @@ typedef struct
 
 typedef struct
 {
-    int16_t pcl_x[180];
-    int16_t pcl_y[180];
+    int16_t pcl_x[10];
+    int16_t pcl_y[10];
 } obstacle_t;
 
 typedef struct
@@ -124,6 +124,17 @@ typedef struct
 {
     uint8_t data;
 } epoch_t;
+
+typedef struct
+{
+    uint8_t data;
+} role_t;
+
+typedef struct
+{
+    int16_t x;
+    int16_t y;
+} target_positioning_t;
 
 //=============================================
 
@@ -152,6 +163,8 @@ typedef struct
     keeper_on_field_t keeper_on_field;
     prediction_t prediction;
     epoch_t epoch;
+    role_t role;
+    target_positioning_t target_positioning;
 } agent1_t;
 
 typedef struct
@@ -166,6 +179,8 @@ typedef struct
     keeper_on_field_t keeper_on_field;
     prediction_t prediction;
     epoch_t epoch;
+    role_t role;
+    target_positioning_t target_positioning;
 } agent2_t;
 
 typedef struct
@@ -180,6 +195,8 @@ typedef struct
     keeper_on_field_t keeper_on_field;
     prediction_t prediction;
     epoch_t epoch;
+    role_t role;
+    target_positioning_t target_positioning;
 } agent3_t;
 
 //=============================================

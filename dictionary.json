@@ -12,17 +12,17 @@
     "target_manual": {
       "x": "int2",
       "y": "int2",
-      "theta": "float4"
+      "theta": "int2"
     },
     "offset_robot": {
       "x": "int2",
       "y": "int2",
-      "theta": "float4"
+      "theta": "int2"
     },
     "data_mux": {
-      "mux_1": "uint1",
-      "mux_2": "uint1",
-      "mux_control": "uint1"
+      "mux_1": "uint2",
+      "mux_2": "uint2",
+      "mux_control": "uint2"
     },
     "trim": {
       "translation_vel": "uint1[5]",
@@ -67,8 +67,8 @@
       "target_y": "int2"
     },
     "obstacle": {
-      "pcl_x": "int2[180]",
-      "pcl_y": "int2[180]"
+      "pcl_x": "int2[10]",
+      "pcl_y": "int2[10]"
     },
     "battery": {
       "voltage": "int2"
@@ -83,6 +83,13 @@
     },
     "epoch": {
       "data": "uint1"
+    },
+    "role": {
+      "data": "uint1"
+    },
+    "target_positioning": {
+      "x": "int2",
+      "y": "int2"
     }
   },
   "agent2": {
@@ -116,8 +123,8 @@
       "target_y": "int2"
     },
     "obstacle": {
-      "pcl_x": "int2[180]",
-      "pcl_y": "int2[180]"
+      "pcl_x": "int2[10]",
+      "pcl_y": "int2[10]"
     },
     "battery": {
       "voltage": "int2"
@@ -132,6 +139,13 @@
     },
     "epoch": {
       "data": "uint1"
+    },
+    "role": {
+      "data": "uint1"
+    },
+    "target_positioning": {
+      "x": "int2",
+      "y": "int2"
     }
   },
   "agent3": {
@@ -165,8 +179,8 @@
       "target_y": "int2"
     },
     "obstacle": {
-      "pcl_x": "int2[180]",
-      "pcl_y": "int2[180]"
+      "pcl_x": "int2[10]",
+      "pcl_y": "int2[10]"
     },
     "battery": {
       "voltage": "int2"
@@ -181,6 +195,13 @@
     },
     "epoch": {
       "data": "uint1"
+    },
+    "role": {
+      "data": "uint1"
+    },
+    "target_positioning": {
+      "x": "int2",
+      "y": "int2"
     }
   }
 }
